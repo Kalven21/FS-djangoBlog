@@ -1,0 +1,16 @@
+label{
+    width: 50%;
+    background-color: antiquewhite;
+}
+input{
+    width: 50%;
+}
+a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+.NewNavbar{
+    background-color: antiquewhite;
+}
+/*Home*/
