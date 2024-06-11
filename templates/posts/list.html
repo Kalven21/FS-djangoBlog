@@ -1,20 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block title %}List{% endblock title %}
 
 {% block content %}
 {% for post in post_list %}
-    <div class="card">
+    <div class="cardu">
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary">{{ post.subtitle }}</h6>
             <p class="card-text">{{ post.body|truncatechars:128 }}</p> 
-            <a href="{% url 'detail' post.id %}" class="card-link">Continue reading...</a>
-            {% if user.is_autenticated %}
-                {% if post.authos == user %}
-                <a href="{% url 'edit' post.id  %}" class="card-link">Edit</a>
-                <button class="btn btn-danger"><a href="{% url 'delete' post.id %}" >Delete</a></button>
-                {% endif %}
+            <a href="{% url 'detail' post.id %}">Continue reading...</a>
+            {% if user.is_authenticated %}
+                {% if post.author == user %}
+            <a href="{% url 'edit' post.id  %}">Edit</a>
+            <button class="btn btn-danger"><a href="{% url 'delete' post.id %}" >Delete</a></button>
+            {% endif %}
             {% endif %}
         </div>
     </div>

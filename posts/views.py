@@ -10,13 +10,41 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin
 )
-from .models import Post
+from .models import Post, Status
 
 
 class PostListView(ListView):
     template_name = "posts/list.html"
     model = Post
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        published = Status.objects.get(name="published")
+        context["post_list"] = (
+            Post.objects
+            .filter(status=published)
+            .order_by("created_on").reverse()
+        )
+        return context
+    
+class DrafPostListView(LoginRequiredMixin, ListView):
+    template_name = "posts/list.html"
+    model = Post
+    
+    def get_context_data(self, **kwargs):
+        # Retrive the context object (a kind of dictionary)
+        context = super().get_context_data(**kwargs)
+        # Retrieve the instance of Status that represents "draf" mode
+        draft_status = Status.objects.get(name="draft")
+        # Filter posts based on draft status and author (and order by created_on)
+        context["post_list"] = (
+            Post.objects
+            .filter(status=draft_status)
+            .filter(author=self.request.user)
+            .order_by("created_on").reverse()
+        )
+        return context
+
 class PostDetailView(DetailView):
     template_name = "posts/detail.html"
     model = Post
